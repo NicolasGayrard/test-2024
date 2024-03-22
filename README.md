@@ -1,51 +1,72 @@
-# Symfony Docker
+# LBO - Delivery customer notification
+Allocated time: 60-70 minutes.
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework,
-with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) inside!
+## To get started
+### Requirements
+- Docker
+- Make
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+### Setup
+- Run `make build && make up`
+- In terminal: `docker exec -ti test-2024-php-1 /bin/bash`
+- Once in the Docker container:
+    - Execute the tracking command: `bin/console parcel:tracking MR-D123456789`
+    - Execute the functional test: `./vendor/bin/phpunit`
 
-## Getting Started
+### Fixtures for testing purpose
+4 tracking codes are recognized at the moment, 2 for Mondial Relay and the other for Colissimo:
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --no-cache` to build fresh images
-3. Run `docker compose up --pull always -d --wait` to start the project
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+| Tracking code   | Postal Service| Notified customer | Is delivered? |
+|-----------------|---|---|---------------|
+| SOCO-123456789  | So.Colissimo | j.wayne@soco.com | no            |
+| MR-123456789    | MondialRelay | j.does@mondialrelay.com | no            |
+| SOCO-D123456789 | So.Colissimo | j.wayne@soco.com | yes           |
+| MR-D123456789   | MondialRelay | j.does@mondialrelay.com | yes           |
 
-## Features
+## Assignment
+The aim of this exercise is to demonstrate how you handle the integration of some new functionality into an existing code.
 
-* Production, development and CI ready
-* Just 1 service by default
-* Blazing-fast performance thanks to [the worker mode of FrankenPHP](https://github.com/dunglas/frankenphp/blob/main/docs/worker.md) (automatically enabled in prod mode)
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and prod)
-* HTTP/3 and [Early Hints](https://symfony.com/blog/new-in-symfony-6-3-early-hints) support
-* Real-time messaging thanks to a built-in [Mercure hub](https://symfony.com/doc/current/mercure.html)
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Super-readable configuration
+### What to do
+Currently, we're offering two shipping methods to our customers that are:
+- So.Colissimo
+- Mondial Relay
 
-**Enjoy!**
+**You have to complete the code that will send notification to the customer once their parcel has been delivered.**
 
-## Docs
+To simplify the exercise we have coded a large part of the feature to give you enough time to design the best way possible.
 
-1. [Build options](docs/build.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using MySQL instead of PostgreSQL](docs/mysql.md)
-8. [Using Alpine Linux instead of Debian](docs/alpine.md)
-9. [Using a Makefile](docs/makefile.md)
-10. [Updating the template](docs/updating.md)
-11. [Troubleshooting](docs/troubleshooting.md)
+### Steps
+1. Clone the repository and fork the `master` branch
 
-## License
+2. Complete with your own code the "holes" to complete the feature
 
-Symfony Docker is available under the MIT License.
+    - You can test your command in the container: `bin/console parcel:tracking <trackingCode>`
 
-## Credits
+    - The console display should be for Mondial Relay:
 
-Created by [Kévin Dunglas](https://dunglas.dev), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+        ```
+         bin/console parcel:tracking MR-D123456789
+         [John Doe <j.doe@mondialrelay.com>] New Mondial Relay parcel "MR-D123456789" received.
+      ```
+
+      And for So.Colissimo:
+
+         ```
+         bin/console parcel:tracking MR-D123456789
+         [John Wayne <j.wayne@soco.com>] New SoColissimo parcel "SOCO-D123456789" received.
+         ```
+
+3. The PHPUnit test suite must pass without error
+    - You can trigger the test in the container: `./vendor/bin/phpunit`
+
+**BONUS: Add another postal service, for instance "Chronopost"**
+
+4. Once all done, open a PR with your branch and send it to us:
+    - c.debatz@laboutiqueofficielle.com
+    - g.vincendon@laboutiqueofficielle.com
+
+### Important
+- Do not forget to handle all potential exceptions in your code
+- We expect you to design and build some SOLID architecture ( https://www.baeldung.com/solid-principles )
+- Always try to be consistent in your commits
+- You can use any of Symfony or PHP 8.3 features

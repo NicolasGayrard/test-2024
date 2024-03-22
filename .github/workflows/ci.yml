@@ -46,13 +46,13 @@ jobs:
         if: false # Remove this line when the homepage will be configured, or change the path to check
         run: curl -vk --fail-with-body https://localhost
       -
-        name: Create test database
+        name: Create tests database
         if: false # Remove this line if Doctrine ORM is installed
-        run: docker compose exec -T php bin/console -e test doctrine:database:create
+        run: docker compose exec -T php bin/console -e tests doctrine:database:create
       -
         name: Run migrations
         if: false # Remove this line if Doctrine Migrations is installed
-        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+        run: docker compose exec -T php bin/console -e tests doctrine:migrations:migrate --no-interaction
       -
         name: Run PHPUnit
         if: false # Remove this line if PHPUnit is installed
@@ -60,7 +60,7 @@ jobs:
       -
         name: Doctrine Schema Validator
         if: false # Remove this line if Doctrine ORM is installed
-        run: docker compose exec -T php bin/console -e test doctrine:schema:validate
+        run: docker compose exec -T php bin/console -e tests doctrine:schema:validate
   lint:
     name: Docker Lint
     runs-on: ubuntu-latest
