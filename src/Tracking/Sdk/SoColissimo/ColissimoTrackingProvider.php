@@ -9,11 +9,12 @@ use App\Tracking\Sdk\SoColissimo\Dto\ColissimoTrackingStatus;
 
 class ColissimoTrackingProvider
 {
+    const  string SHORTCUT = 'SOCO';
     public function provide (string $trackingCode): ColissimoTrackingResponse
     {
         $parcels = [
-            'SOCO-D123456789' => ColissimoTrackingStatus::Delivered,
-            'SOCO-123456789' => ColissimoTrackingStatus::Sent
+            self::SHORTCUT.'-D123456789' => ColissimoTrackingStatus::Delivered,
+            self::SHORTCUT.'-123456789' => ColissimoTrackingStatus::Sent
         ];
 
         foreach ($parcels as $parcelCode => $parcelStatus) {

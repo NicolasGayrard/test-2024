@@ -7,11 +7,12 @@ use App\Tracking\Sdk\MondialRelay\Dto\MondialRelayTrackingResponse;
 
 class MondialRelayTrackingProvider
 {
+    const  string SHORTCUT = 'MR';
     public function provide (string $trackingCode): MondialRelayTrackingResponse
     {
         $parcels = [
-            'MR-123456789' => 2, // sent
-            'MR-D123456789' => 3 // delivered
+            self::SHORTCUT.'-123456789' => 2, // sent
+            self::SHORTCUT.'-D123456789' => 3 // delivered
         ];
 
         foreach ($parcels as $parcelCode => $parcelStatus) {
@@ -23,6 +24,7 @@ class MondialRelayTrackingProvider
                 );
             }
         }
+
 
         throw new TrackingFailureException(
             sprintf('Could not find MondialRelay parcel tracking with ID "%s".', $trackingCode)
